@@ -1,8 +1,12 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import Navbar from "./components/navbar/navbar";
+import Hero from "./components/hero/hero";
+import Footer from "./components/footer/footer";
+
 function App() {
-  const [movies, setMovies] = useState(null);
+  const [movies, setMovies] = useState();
+
   useEffect(() => {
     fetch("https://movies.slideworks.cc/movies")
       .then(async (res) => {
@@ -13,13 +17,29 @@ function App() {
       })
       .catch((erro) => console.error(erro));
   }, []);
-  console.log(movies);
+
+  useEffect(() => {
+    console.log(movies);
+  }, [movies]);
+
   return (
-    <>
+    <main>
       <Navbar />
 
-      <h1>{movies[5].title}</h1>
-    </>
+      <div className="content">
+        {movies ? (
+          <Hero
+            title={movies[6]?.title}
+            producers={movies[6]?.crew}
+            img={movies[6]?.image_url}
+            rating={movies[6]?.rating}
+          />
+        ) : (
+          <h1>Carregando...</h1>
+        )}
+      </div>
+      <Footer />
+    </main>
   );
 }
 
